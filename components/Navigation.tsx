@@ -30,8 +30,8 @@ export default function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-cream-50/95 backdrop-blur-sm border-b border-vintage-200/50">
       <div className="max-w-7xl mx-auto px-8 lg:px-24">
         <div className="flex items-center justify-between h-24">
-          <Link href="/" className="text-xl md:text-2xl font-serif font-normal tracking-[0.02em] text-vintage-900 transition-all duration-300 hover:text-vintage-700">
-            Minami Nagai
+          <Link href="/" className="text-xl md:text-2xl font-serif font-normal tracking-[0.02em] text-vintage-900 transition-all duration-300 hover:text-vintage-700 uppercase">
+            MINAMI NAGAI
           </Link>
           
           <div className="hidden md:flex items-center gap-10">

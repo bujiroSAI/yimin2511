@@ -14,6 +14,8 @@ export interface Translations {
     composer: string
     pianist: string
     description: string
+    profileName: string
+    profileRole: string
     profileText1: string
     profileText2: string
     worksLink: string
@@ -80,6 +82,8 @@ export const translations: Record<Language, Translations> = {
       composer: 'composer',
       pianist: 'pianist',
       description: '',
+      profileName: '永井みなみ',
+      profileRole: '作曲家',
       profileText1: '大阪府出身。大阪府立夕陽丘高校音楽科ピアノ専攻を経て、東京藝術大学音楽学部作曲科卒業。2022年に渡独し、現在ミュンヘン音楽演劇大学作曲科修士課程に在籍。',
       profileText2: '作曲をMoritz Eggert氏に、リート伴奏をRudi Spring氏に師事。現在はドイツ・ミュンヘンと東京を拠点に作曲・編曲・演奏活動を展開する。2026年にはオランダ・アムステルダムでのアーティストインレジデンスにも招聘されており、国外からも注目される。',
       worksLink: 'Works',
@@ -154,6 +158,8 @@ export const translations: Record<Language, Translations> = {
       composer: 'Komponistin',
       pianist: 'Pianistin',
       description: '',
+      profileName: 'Minami Nagai',
+      profileRole: 'Komponistin',
       profileText1: 'Geboren in Osaka. Abschluss an der Musikabteilung für Klavier der Osaka Prefectural Yuhigaoka High School, gefolgt von einem Abschluss in Komposition an der Tokyo University of the Arts. Seit 2022 in Deutschland und derzeit im Masterstudium Komposition an der Hochschule für Musik und Theater München.',
       profileText2: 'Studierte Komposition bei Moritz Eggert und Liedbegleitung bei Rudi Spring. Aktiv als Komponistin, Arrangeurin und Interpretin in München, Deutschland und Tokio. 2026 wird sie zu einem Artist-in-Residence-Programm in Amsterdam, Niederlande eingeladen und erregt auch international Aufmerksamkeit.',
       worksLink: 'Werke',
@@ -228,6 +234,8 @@ export const translations: Record<Language, Translations> = {
       composer: 'composer',
       pianist: 'pianist',
       description: '',
+      profileName: 'Minami Nagai',
+      profileRole: 'Composer',
       profileText1: 'Born in Osaka. Graduated from the Piano Department of Osaka Prefectural Yuhigaoka High School, followed by a degree in Composition from Tokyo University of the Arts. Moved to Germany in 2022 and currently enrolled in the Master\'s program in Composition at the University of Music and Performing Arts Munich.',
       profileText2: 'Studied composition with Moritz Eggert and lied accompaniment with Rudi Spring. Active as a composer, arranger, and performer in Munich, Germany and Tokyo. In 2026, she will be invited to an artist-in-residence program in Amsterdam, Netherlands, attracting international attention.',
       worksLink: 'Works',

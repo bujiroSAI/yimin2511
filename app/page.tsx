@@ -9,10 +9,10 @@ import AnimatedSection from '@/components/AnimatedSection'
 
 // Hero画像データ
 const heroImages = [
-  { id: 1, src: '/hero/hero-1.jpg', alt: 'Hero Image 1' },
-  { id: 2, src: '/hero/hero-2.jpg', alt: 'Hero Image 2' },
-  { id: 3, src: '/hero/hero-3.jpg', alt: 'Hero Image 3' },
-  { id: 4, src: '/hero/hero-4.jpg', alt: 'Hero Image 4' },
+  { id: 1, src: '/hero/IMG_3397.jpg', alt: 'Hero Image 1' },
+  { id: 2, src: '/hero/IMG_3416.JPG', alt: 'Hero Image 2' },
+  { id: 3, src: '/hero/IMG_3415.JPG', alt: 'Hero Image 3' },
+  { id: 4, src: '/hero/IMG_3396_2.JPG', alt: 'Hero Image 4' },
 ]
 
 // YouTube動画データ
@@ -40,64 +40,49 @@ export default function Home() {
 
   return (
     <div className="pt-24 bg-cream-50">
-      {/* Hero Section - 絵葉書風のシンプルなヒーロー */}
-      <section className="relative min-h-[90vh] w-full overflow-hidden flex items-center justify-center">
+      {/* Hero Section - ポラロイド風 */}
+      <section className="relative min-h-[90vh] w-full overflow-hidden flex items-center justify-center bg-white">
         {heroImages.map((image, index) => (
           <div
             key={image.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ${
+            className={`absolute inset-0 transition-opacity duration-1000 flex items-center justify-center ${
               index === currentHeroSlide ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            {/* Background Image - フィルムカメラ風 */}
-            <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{
-                backgroundImage: `url(${image.src})`,
-                filter: 'sepia(10%) contrast(1.05) brightness(0.98)',
-              }}
-            >
-              {/* Overlay - ノスタルジックなオーバーレイ */}
-              <div className="absolute inset-0 bg-cream-50/30"></div>
+            {/* ポラロイド風の画像フレーム */}
+            <div className="relative w-full max-w-6xl mx-auto px-8">
+              <div className="bg-white p-6 md:p-8 shadow-2xl">
+                {/* 画像 - 原色のまま、大きく配置 */}
+                <div
+                  className="w-full aspect-[4/3] bg-cover bg-center bg-no-repeat"
+                  style={{
+                    backgroundImage: `url(${image.src})`,
+                  }}
+                />
+              </div>
             </div>
           </div>
         ))}
         
-        {/* Content - 中央配置、大きな余白 */}
-        <div className="relative z-10 w-full flex items-center justify-center py-32 px-8 lg:px-24">
-          <div className="text-center max-w-5xl">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-normal tracking-[0.02em] mb-12 text-vintage-900 animate-fade-in-up">
-              {t.home.title}
-            </h1>
-            <div className="flex justify-center gap-8 mb-12 text-sm md:text-base tracking-[0.15em] uppercase text-vintage-700 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-              <span>{t.home.composer}</span>
-              <span className="text-vintage-400">·</span>
-              <span>{t.home.pianist}</span>
-            </div>
-            <p className="text-base md:text-lg text-vintage-800 max-w-3xl mx-auto leading-relaxed tracking-wide animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-              {t.home.subtitle}
-            </p>
-          </div>
-        </div>
 
-        {/* Hero Navigation Dots - シンプルに */}
+        {/* Hero Navigation Dots - 白系の茶色 */}
         <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex gap-4 z-20">
           {heroImages.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentHeroSlide(index)}
               className={`h-1 transition-all duration-300 ${
-                index === currentHeroSlide ? 'w-16 bg-vintage-700' : 'w-8 bg-vintage-300 hover:bg-vintage-500'
+                index === currentHeroSlide ? 'w-16 bg-stone-500' : 'w-8 bg-stone-400/50 hover:bg-stone-500'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
         </div>
 
-        {/* Hero Navigation Arrows - 控えめに */}
+        {/* Hero Navigation Arrows - 白系の茶色 */}
         <button
           onClick={() => setCurrentHeroSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length)}
-          className="absolute left-8 md:left-16 top-1/2 transform -translate-y-1/2 text-vintage-600 hover:text-vintage-800 transition-all duration-300 z-20 group"
+          className="absolute left-8 md:left-16 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-600 transition-all duration-300 z-20 group"
           aria-label="Previous slide"
         >
           <svg className="w-8 h-8 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -106,7 +91,7 @@ export default function Home() {
         </button>
         <button
           onClick={() => setCurrentHeroSlide((prev) => (prev + 1) % heroImages.length)}
-          className="absolute right-8 md:right-16 top-1/2 transform -translate-y-1/2 text-vintage-600 hover:text-vintage-800 transition-all duration-300 z-20 group"
+          className="absolute right-8 md:right-16 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-600 transition-all duration-300 z-20 group"
           aria-label="Next slide"
         >
           <svg className="w-8 h-8 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -119,6 +104,16 @@ export default function Home() {
       <section className="py-48 px-8 lg:px-24">
         <div className="max-w-5xl mx-auto">
           <AnimatedSection direction="up" delay={0}>
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-[0.02em] text-vintage-900 mb-4">
+                {t.home.profileName}
+              </h2>
+              <p className="text-lg md:text-xl text-vintage-700 tracking-wide font-serif">
+                {t.home.profileRole}
+              </p>
+            </div>
+          </AnimatedSection>
+          <AnimatedSection direction="up" delay={100}>
             <div className="space-y-12">
               <p className="text-base md:text-lg text-vintage-800 leading-relaxed tracking-wide font-serif-jp">
                 {t.home.profileText1}
