@@ -51,7 +51,7 @@ export default function AboutPage() {
             <div className="aspect-[3/4] bg-vintage-100 rounded-sm overflow-hidden relative" style={{ filter: 'sepia(5%)' }}>
               {/* ポートレート画像 - 実際の画像パスに置き換えてください */}
               <img
-                src="/about/portrait.jpg"
+                src="/about/minaminagai.jpg"
                 alt={t.about.name}
                 className="w-full h-full object-cover"
                 style={{ filter: 'sepia(10%) contrast(1.05) brightness(0.98)' }}

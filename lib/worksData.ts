@@ -11,6 +11,16 @@ export interface Work {
 
 export const worksData: Work[] = [
   {
+    id: 'new-me',
+    title: 'NEW ME',
+    year: '2025',
+    category: 'Contemporary',
+    image: '/works/new-me.png',
+    genre: 'Contemporary',
+    instruments: [],
+    tags: ['現代音楽', '2025'],
+  },
+  {
     id: 'opera-fune',
     title: 'オペラ《船はついに安らぎぬ》',
     year: '2025',

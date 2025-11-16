@@ -265,6 +265,40 @@ const worksDetailData: Record<string, {
       en: 'Through a commission from the music production company Shibamusic, the opera "葵上のあわい" (Libretto: Naoyuki Tsunogai) premiered at Millennium Hall (Tokyo).',
     },
   },
+  'new-me': {
+    title: {
+      ja: 'NEW ME',
+      de: 'NEW ME',
+      en: 'NEW ME',
+    },
+    englishTitle: 'NEW ME',
+    project: {
+      ja: '現代音楽',
+      de: 'Zeitgenössische Musik',
+      en: 'Contemporary Music',
+    },
+    client: {
+      ja: '',
+      de: '',
+      en: '',
+    },
+    date: '2025',
+    service: {
+      ja: '作曲',
+      de: 'Komposition',
+      en: 'Composition',
+    },
+    challenge: {
+      ja: '新しい自分を表現する現代音楽作品。',
+      de: 'Ein zeitgenössisches Musikwerk, das das neue Ich ausdrückt.',
+      en: 'A contemporary music work expressing the new self.',
+    },
+    description: {
+      ja: '新しい自分を表現する現代音楽作品。',
+      de: 'Ein zeitgenössisches Musikwerk, das das neue Ich ausdrückt.',
+      en: 'A contemporary music work expressing the new self.',
+    },
+  },
 }
 
 export default function WorkDetailPage({ params }: { params: { id: string } }) {
@@ -355,7 +389,22 @@ export default function WorkDetailPage({ params }: { params: { id: string } }) {
         <AnimatedSection direction="up" delay={900}>
           <div className="mb-24">
             <div className="aspect-video bg-vintage-100 rounded-sm overflow-hidden hover:shadow-xl transition-all duration-500 group relative" style={{ filter: 'sepia(5%)' }}>
-              <div className="w-full h-full flex items-center justify-center text-vintage-400 group-hover:text-vintage-600 transition-colors">
+              {/* 画像 */}
+              <img
+                src={work.image}
+                alt={workDetail.title[language]}
+                className="w-full h-full object-cover"
+                style={{ filter: 'sepia(10%) contrast(1.05) brightness(0.98)' }}
+                onError={(e) => {
+                  // 画像が存在しない場合のフォールバック
+                  const target = e.target as HTMLImageElement
+                  target.style.display = 'none'
+                  const placeholder = target.nextElementSibling as HTMLElement
+                  if (placeholder) placeholder.style.display = 'flex'
+                }}
+              />
+              {/* 画像が存在しない場合のプレースホルダー */}
+              <div className="w-full h-full hidden items-center justify-center text-vintage-400 group-hover:text-vintage-600 transition-colors absolute inset-0">
                 <span className="text-sm font-serif-jp">アルバム/シングルカバー画像</span>
               </div>
               <div className="absolute inset-0 bg-cream-50/0 group-hover:bg-cream-50/10 transition-all duration-500"></div>

@@ -160,7 +160,22 @@ export default function Home() {
                   className="group block"
                 >
                   <div className="aspect-square bg-vintage-100 rounded-sm overflow-hidden mb-6 group-hover:opacity-90 transition-all duration-500 relative" style={{ filter: 'sepia(5%)' }}>
-                    <div className="w-full h-full flex items-center justify-center text-vintage-400 group-hover:text-vintage-600 transition-colors">
+                    {/* 画像 */}
+                    <img
+                      src={work.image}
+                      alt={work.title}
+                      className="w-full h-full object-cover"
+                      style={{ filter: 'sepia(10%) contrast(1.05) brightness(0.98)' }}
+                      onError={(e) => {
+                        // 画像が存在しない場合のフォールバック
+                        const target = e.target as HTMLImageElement
+                        target.style.display = 'none'
+                        const placeholder = target.nextElementSibling as HTMLElement
+                        if (placeholder) placeholder.style.display = 'flex'
+                      }}
+                    />
+                    {/* 画像が存在しない場合のプレースホルダー */}
+                    <div className="w-full h-full hidden items-center justify-center text-vintage-400 group-hover:text-vintage-600 transition-colors absolute inset-0">
                       <span className="text-sm px-6 text-center font-serif-jp">{work.title}</span>
                     </div>
                     {/* フィルムカメラ風のオーバーレイ */}
