@@ -29,8 +29,13 @@ export default function Home() {
   const t = translations[language]
   const [currentHeroSlide, setCurrentHeroSlide] = useState(0)
   const [currentYoutubeSlide, setCurrentYoutubeSlide] = useState(0)
+  // スマホ版用：上下2段のスライダー
+  const [currentTopSlide, setCurrentTopSlide] = useState(0)
+  const [currentBottomSlide, setCurrentBottomSlide] = useState(0)
+  const [touchStart, setTouchStart] = useState<{ top: number | null; bottom: number | null }>({ top: null, bottom: null })
+  const [touchEnd, setTouchEnd] = useState<{ top: number | null; bottom: number | null }>({ top: null, bottom: null })
 
-  // Heroスライダーの自動再生
+  // Heroスライダーの自動再生（デスクトップ版）
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentHeroSlide((prev) => (prev + 1) % heroImages.length)
@@ -38,66 +43,170 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
+  // スワイプ処理
+  const minSwipeDistance = 50
+
+  const onTouchStart = (e: React.TouchEvent, section: 'top' | 'bottom') => {
+    const touch = e.targetTouches[0].clientX
+    if (section === 'top') {
+      setTouchStart({ ...touchStart, top: touch })
+      setTouchEnd({ ...touchEnd, top: touch })
+    } else {
+      setTouchStart({ ...touchStart, bottom: touch })
+      setTouchEnd({ ...touchEnd, bottom: touch })
+    }
+  }
+
+  const onTouchMove = (e: React.TouchEvent, section: 'top' | 'bottom') => {
+    const touch = e.targetTouches[0].clientX
+    if (section === 'top') {
+      setTouchEnd({ ...touchEnd, top: touch })
+    } else {
+      setTouchEnd({ ...touchEnd, bottom: touch })
+    }
+  }
+
+  const onTouchEnd = (section: 'top' | 'bottom') => {
+    if (section === 'top') {
+      if (touchStart.top === null || touchEnd.top === null) return
+      const distance = touchStart.top - touchEnd.top
+      const isLeftSwipe = distance > minSwipeDistance
+      const isRightSwipe = distance < -minSwipeDistance
+
+      if (isLeftSwipe && currentTopSlide < 1) {
+        setCurrentTopSlide(currentTopSlide + 1)
+      }
+      if (isRightSwipe && currentTopSlide > 0) {
+        setCurrentTopSlide(currentTopSlide - 1)
+      }
+      setTouchStart({ ...touchStart, top: null })
+      setTouchEnd({ ...touchEnd, top: null })
+    } else {
+      if (touchStart.bottom === null || touchEnd.bottom === null) return
+      const distance = touchStart.bottom - touchEnd.bottom
+      const isLeftSwipe = distance > minSwipeDistance
+      const isRightSwipe = distance < -minSwipeDistance
+
+      if (isLeftSwipe && currentBottomSlide < 1) {
+        setCurrentBottomSlide(currentBottomSlide + 1)
+      }
+      if (isRightSwipe && currentBottomSlide > 0) {
+        setCurrentBottomSlide(currentBottomSlide - 1)
+      }
+      setTouchStart({ ...touchStart, bottom: null })
+      setTouchEnd({ ...touchEnd, bottom: null })
+    }
+  }
+
   return (
     <div className="pt-24 bg-cream-50">
       {/* Hero Section - ポラロイド風 */}
-      <section className="relative min-h-[90vh] w-full overflow-hidden flex items-center justify-center bg-white">
-        {heroImages.map((image, index) => (
-          <div
-            key={image.id}
-            className={`absolute inset-0 transition-opacity duration-1000 flex items-center justify-center ${
-              index === currentHeroSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            {/* ポラロイド風の画像フレーム */}
-            <div className="relative w-full max-w-6xl mx-auto px-8">
-              <div className="bg-white p-6 md:p-8 shadow-2xl">
-                {/* 画像 - 原色のまま、大きく配置 */}
-                <div
-                  className="w-full aspect-[4/3] bg-cover bg-center bg-no-repeat"
-                  style={{
-                    backgroundImage: `url(${image.src})`,
-                  }}
-                />
-              </div>
+      <section className="relative min-h-[90vh] w-full overflow-hidden bg-white">
+        {/* スマホ版：上下2段レイアウト */}
+        <div className="md:hidden flex flex-col justify-start pt-24 pb-4 gap-1 overflow-hidden h-screen">
+          {/* 上の段：画像1-2 */}
+          <div className="flex-shrink-0 flex items-center justify-center overflow-hidden relative">
+            <div 
+              className="flex transition-transform duration-500 ease-in-out w-full"
+              style={{ transform: `translateX(-${currentTopSlide * 100}%)` }}
+              onTouchStart={(e) => onTouchStart(e, 'top')}
+              onTouchMove={(e) => onTouchMove(e, 'top')}
+              onTouchEnd={() => onTouchEnd('top')}
+            >
+              {heroImages.slice(0, 2).map((image, index) => (
+                <div key={image.id} className="min-w-full flex items-center justify-center px-3">
+                  <div className="bg-white p-1.5 shadow-2xl w-full">
+                    <div
+                      className="w-full aspect-[4/3] bg-cover bg-center bg-no-repeat"
+                      style={{ backgroundImage: `url(${image.src})` }}
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
-        
 
-        {/* Hero Navigation Dots - 白系の茶色 */}
-        <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex gap-4 z-20">
-          {heroImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentHeroSlide(index)}
-              className={`h-1 transition-all duration-300 ${
-                index === currentHeroSlide ? 'w-16 bg-stone-500' : 'w-8 bg-stone-400/50 hover:bg-stone-500'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+          {/* 下の段：画像3-4 */}
+          <div className="flex-shrink-0 flex items-center justify-center overflow-hidden relative">
+            <div 
+              className="flex transition-transform duration-500 ease-in-out w-full"
+              style={{ transform: `translateX(-${currentBottomSlide * 100}%)` }}
+              onTouchStart={(e) => onTouchStart(e, 'bottom')}
+              onTouchMove={(e) => onTouchMove(e, 'bottom')}
+              onTouchEnd={() => onTouchEnd('bottom')}
+            >
+              {heroImages.slice(2, 4).map((image, index) => (
+                <div key={image.id} className="min-w-full flex items-center justify-center px-3">
+                  <div className="bg-white p-1.5 shadow-2xl w-full">
+                    <div
+                      className="w-full aspect-[4/3] bg-cover bg-center bg-no-repeat"
+                      style={{ backgroundImage: `url(${image.src})` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Hero Navigation Arrows - 白系の茶色 */}
-        <button
-          onClick={() => setCurrentHeroSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length)}
-          className="absolute left-8 md:left-16 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-600 transition-all duration-300 z-20 group"
-          aria-label="Previous slide"
-        >
-          <svg className="w-8 h-8 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-          </svg>
-        </button>
-        <button
-          onClick={() => setCurrentHeroSlide((prev) => (prev + 1) % heroImages.length)}
-          className="absolute right-8 md:right-16 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-600 transition-all duration-300 z-20 group"
-          aria-label="Next slide"
-        >
-          <svg className="w-8 h-8 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
-        </button>
+        {/* デスクトップ版：従来の1つのスライダー */}
+        <div className="hidden md:flex relative min-h-[90vh] items-center justify-center">
+          {heroImages.map((image, index) => (
+            <div
+              key={image.id}
+              className={`absolute inset-0 transition-opacity duration-1000 flex items-center justify-center ${
+                index === currentHeroSlide ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              {/* ポラロイド風の画像フレーム */}
+              <div className="relative w-full max-w-6xl mx-auto px-8">
+                <div className="bg-white p-8 shadow-2xl">
+                  {/* 画像 - 原色のまま、大きく配置 */}
+                  <div
+                    className="w-full aspect-[4/3] bg-cover bg-center bg-no-repeat"
+                    style={{
+                      backgroundImage: `url(${image.src})`,
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Hero Navigation Dots - 白系の茶色 */}
+          <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex gap-4 z-20">
+            {heroImages.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentHeroSlide(index)}
+                className={`h-1 transition-all duration-300 ${
+                  index === currentHeroSlide ? 'w-16 bg-stone-500' : 'w-8 bg-stone-400/50 hover:bg-stone-500'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Hero Navigation Arrows - 白系の茶色 */}
+          <button
+            onClick={() => setCurrentHeroSlide((prev) => (prev - 1 + heroImages.length) % heroImages.length)}
+            className="absolute left-16 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-600 transition-all duration-300 z-20 group"
+            aria-label="Previous slide"
+          >
+            <svg className="w-8 h-8 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </button>
+          <button
+            onClick={() => setCurrentHeroSlide((prev) => (prev + 1) % heroImages.length)}
+            className="absolute right-16 top-1/2 transform -translate-y-1/2 text-stone-500 hover:text-stone-600 transition-all duration-300 z-20 group"
+            aria-label="Next slide"
+          >
+            <svg className="w-8 h-8 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+        </div>
       </section>
 
       {/* Profile Text Section - 絵葉書風の大きな余白 */}
